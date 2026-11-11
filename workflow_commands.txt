@@ -1,0 +1,16 @@
+# 1. CheckM2
+checkm2 predict --input genomes_dir --output checkm2_out --threads 10
+
+# 2. fastANI
+fastANI -q query_genome.fna --rl reference_list.txt -o fastani_output.txt
+
+# 3. Panaroo
+panaroo -i gff_files/*.gff -o panaroo_out --clean-mode strict
+
+# 4. ABRicate (ResFinder/VFDB/PlasmidFinder)
+abricate --db resfinder genomes/*.fna > resfinder_results.tab
+abricate --db vfdb genomes/*.fna > vfdb_results.tab
+abricate --db plasmidfinder genomes/*.fna > plasmidfinder_results.tab
+
+# 5. IQ-TREE
+iqtree2 -s core_alignment.fasta -m GTR+F+R5 -B 1000 -T 10
